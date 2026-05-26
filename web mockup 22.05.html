@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+
+<html lang="sq">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Aplikim për licencë | AKKC</title>
+<style>
+    :root{
+      --purple:#48207b; --purple-2:#6d5690; --hero-end:#8c78aa; --teal:#009b93; --teal-dark:#00756f;
+      --green:#49a942; --ink:#34313d; --muted:#6b6875; --line:#e7e4ed; --soft:#f5f3f8; --soft-2:#fbfafc;
+      --danger:#c93838; --ok:#18865f; --white:#fff; --shadow:0 8px 20px rgba(72,32,123,.08); --radius:8px;
+      --base-size:12pt; --site-font:"Times New Roman", Times, serif;
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;color:var(--ink);background:#fff;font-family:var(--site-font);font-size:var(--base-size);line-height:1.45} button,input,select,textarea{font:inherit}
+    .topbar{height:40px;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 48px;font-weight:700}.socials{display:flex;gap:10px}.socials span{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#fff;color:var(--purple);font-weight:800}
+    .nav{height:82px;display:flex;align-items:center;justify-content:space-between;padding:0 42px 0 20px;border-bottom:1px solid #f0eff2;background:#fff;position:sticky;top:0;z-index:50}.brand{display:flex;align-items:center;gap:14px;min-width:330px}.mark{width:119px;height:45px;border:5px solid var(--purple);color:var(--purple);font-size:34px;font-weight:900;letter-spacing:1px;display:flex;align-items:center;justify-content:center;line-height:1}.mark .green{color:var(--green)}.brand-title{color:var(--purple);font-weight:800;line-height:1.12}.menu{display:flex;gap:24px;align-items:center;margin-left:auto;padding-right:32px;font-weight:700}.menu a{text-decoration:none;color:#4f4a59}.menu a.active{color:var(--teal)}.flag{font-size:15px;color:#c1162f;font-weight:800}.ministry{width:86px;text-align:center;color:#333;font-size:7px;line-height:1.05}.ministry .building{width:58px;height:36px;border:2px solid #999;border-bottom-width:5px;margin:0 auto 4px;position:relative}.ministry .building:before,.ministry .building:after{content:"";position:absolute;top:8px;bottom:8px;width:2px;background:#999}.ministry .building:before{left:17px}.ministry .building:after{right:17px}
+    .hero{min-height:250px;background:linear-gradient(90deg,var(--purple) 0%,var(--hero-end) 100%);color:white;display:flex;align-items:center}.hero-inner,.wrap{width:min(1240px,calc(100% - 48px));margin:0 auto}.breadcrumb{color:rgba(255,255,255,.82);font-weight:700;margin-bottom:16px}h1{margin:0 0 18px;font-size:clamp(34px,5vw,52px);line-height:1.06;font-weight:400}.hero-line{width:min(880px,100%);height:1px;background:rgba(255,255,255,.65);margin:0 0 22px}.hero p{max-width:980px;margin:0;font-weight:700}
+    main{background:#fff}.app-shell{padding:28px 0 64px;display:grid;grid-template-columns:minmax(0,1fr) 245px;gap:18px;align-items:start}.panel{border:1px solid var(--line);border-radius:var(--radius);background:white;box-shadow:var(--shadow);overflow:hidden}.panel-head{padding:18px 22px;border-bottom:1px solid var(--line);background:var(--soft)}.panel-head h2{margin:0;color:var(--purple);font-size:14pt;font-weight:800}.panel-head p{margin:5px 0 0;color:var(--muted)}.panel-body{padding:22px}.notice{border-left:4px solid var(--teal);background:#eefaf8;padding:12px 14px;color:#275f5a;font-weight:700;margin-bottom:20px;border-radius:0 6px 6px 0}
+    .stepper{display:grid;grid-template-columns:repeat(4,minmax(210px,1fr));gap:10px;margin-bottom:20px}.step{border:1px solid var(--line);background:#fff;border-radius:8px;padding:12px;cursor:pointer;text-align:left;color:#4b4655;min-height:58px;display:flex;align-items:center}.step strong{display:block;color:var(--purple);font-size:10.8pt;line-height:1.15}.step.active{border-color:var(--teal);box-shadow:0 0 0 2px rgba(0,155,147,.08)}.step.done strong{color:var(--ok)}.step-panel{display:none}.step-panel.active{display:block}
+    .section-title{display:flex;align-items:center;margin:0 0 14px;color:var(--purple);font-size:14pt;font-weight:900;border-left:4px solid var(--purple);border-bottom:1px solid var(--line);padding:0 0 8px 12px}.subsection-title{margin:24px 0 12px;color:var(--purple);font-size:13pt;font-weight:900;border-bottom:1px solid var(--line);padding-bottom:8px}.section-note{margin:-6px 0 14px;color:var(--muted);font-style:italic}.req{color:var(--danger);padding-left:2px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 18px}.full{grid-column:1/-1}.field label,.upload-label{display:block;color:#403b49;font-weight:800;margin-bottom:7px}input[type="text"],input[type="email"],input[type="tel"],input[type="number"],input[type="date"],textarea,select{width:100%;min-height:46px;border:1px solid #d9d4e3;border-radius:6px;padding:10px 12px;color:var(--ink);background:white}textarea{min-height:104px;resize:vertical}.invalid{border-color:var(--danger)!important;background:#fffafa!important}.error-text{display:none;color:var(--danger);font-size:11pt;font-weight:800;margin-top:5px}.invalid + .error-text{display:block}
+    .license-options,.choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.license-options{grid-template-columns:1fr}.choice{border:1px solid var(--line);border-radius:8px;padding:13px;display:flex;gap:9px;align-items:flex-start;font-weight:700;color:#4a4652;background:#fff}.choice input,.declaration input{accent-color:var(--teal);margin-top:3px}.choice.wide{grid-column:span 3}
+    .tech-note{background:#fbfafc;border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:0 6px 6px 0;padding:11px 14px;margin:0 0 18px;color:#4d4858}.tech-note strong{color:var(--purple);font-style:normal}.filler-choice{margin-top:18px;border:1px solid var(--line);border-radius:8px;background:var(--soft-2);padding:14px}.filler-choice-title{font-weight:900;color:var(--purple);margin-bottom:10px}.filler-choice .choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.doc-collapse{border:1px solid var(--line);border-radius:8px;background:#fff;margin:14px 0;overflow:hidden}.doc-collapse-head{width:100%;border:0;background:var(--soft);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:left;cursor:pointer;color:var(--purple);font-weight:900}.doc-collapse-head span small{display:block;color:var(--muted);font-weight:700;margin-top:4px}.doc-collapse-body{display:none;padding:14px}.doc-collapse.open .doc-collapse-body{display:block}.doc-collapse-action{color:var(--teal-dark);font-weight:900;white-space:nowrap}.doc-table{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:8px;overflow:hidden;display:table}.doc-table th{background:var(--soft);color:var(--purple);text-align:left;font-weight:900;padding:10px 12px;border-bottom:1px solid var(--line)}.doc-table td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:middle}.doc-table tr:last-child td{border-bottom:0}.doc-name{font-weight:900;color:#35313d}.doc-help{display:block;margin:5px 0 0;color:var(--muted);font-size:11pt;font-style:italic}.doc-help-toggle{display:none}.doc-status{font-weight:900;color:var(--danger);font-size:11pt}.doc-status.ok{color:var(--ok)}.doc-actions input[type="file"]{max-width:220px;font-size:10.5pt}
+    .accordion{border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:12px}.acc-head{width:100%;border:0;background:var(--soft);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:var(--purple);font-weight:900;text-align:left}.acc-head small{display:block;color:var(--muted);font-weight:700;margin-top:3px}.acc-body{display:none;padding:14px}.accordion.open .acc-body{display:block}.person-box{display:grid;grid-template-columns:minmax(0,1fr) 240px auto;gap:14px;align-items:end;border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--soft);margin-bottom:16px}.draft{min-height:46px;border:1px solid var(--teal);border-radius:6px;background:var(--teal);color:#fff;padding:0 16px;font-weight:900;cursor:pointer;white-space:nowrap}.remove-person{border:1px solid #d8d2e2;border-radius:6px;background:white;color:var(--purple);min-height:36px;padding:0 12px;font-weight:800;cursor:pointer}
+    .selfdeclarations{display:grid;gap:14px}.self-card{border:1px solid var(--line);border-radius:8px;background:#fff;padding:14px}.self-check{display:flex;align-items:flex-start;gap:10px;color:var(--purple);font-weight:900;line-height:1.35;margin-bottom:8px}.self-check input{margin-top:3px;accent-color:var(--teal);width:18px;height:18px;flex:0 0 auto}.self-card p{margin:8px 0;color:#403b49}.self-card ul{margin:8px 0 0 20px;padding:0;color:#403b49}.self-card li{margin:5px 0}.declaration-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}.declaration-fields .full{grid-column:1/-1}.small-note{font-size:11pt;color:var(--muted);font-style:italic;margin-top:10px}.declare-action{text-align:center;margin-top:20px}.declare-action button,.print-btn{min-height:44px;border:1px solid var(--teal);border-radius:6px;background:var(--teal);color:white;padding:0 28px;font-weight:900;cursor:pointer;position:relative;z-index:5}
+    .action-row{display:flex;justify-content:space-between;gap:12px;margin-top:22px}.nav-btn{min-height:42px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--purple);font-weight:900;padding:0 18px;cursor:pointer}.nav-btn.primary{border-color:var(--teal);background:var(--teal);color:white}.nav-btn:disabled{background:#ddd;color:#888;border-color:#ddd;cursor:not-allowed}
+    .side{position:sticky;top:102px;display:grid;gap:16px}.progress-big{font-size:28pt;color:var(--purple);font-weight:900;margin:0}.bar{height:8px;border-radius:20px;background:#ece8f1;overflow:hidden;margin:10px 0 12px}.bar span{display:block;height:100%;width:0;background:var(--teal);transition:width .2s}.submit{width:100%;min-height:44px;border:0;border-radius:6px;background:var(--teal);color:white;font-weight:900;cursor:pointer}.submit:disabled{background:#a9a5b2;cursor:not-allowed}.side-note{margin:10px 0 0;color:var(--muted);font-size:11pt}.missing-dropdown{margin-top:14px;border:1px solid var(--line);border-radius:6px;overflow:hidden}.missing-toggle{width:100%;border:0;background:var(--soft);color:var(--purple);font-weight:900;padding:10px 12px;text-align:left;cursor:pointer}.missing-menu{display:none;padding:8px;background:#fff}.missing-menu.open{display:grid;gap:7px}.missing-menu button{border:1px solid #f0d0d0;background:#fffafa;color:#7b2222;border-radius:5px;padding:7px;text-align:left;font-weight:800;cursor:pointer}
+
+    .download-panel .panel-body{display:grid;gap:12px}
+    .download-intro{margin:0 0 4px;color:var(--muted);font-style:italic}
+    .download-link{display:block;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--purple);text-decoration:none;font-weight:800;line-height:1.25;padding:12px 14px;margin-bottom:10px}
+    .download-link:hover{border-color:var(--teal);color:var(--teal-dark);background:#fbfffe}
+    .download-link small{display:none}
+    .review-paper{border:1px solid var(--line);background:#fff;padding:26px;box-shadow:0 4px 12px rgba(0,0,0,.04)}.review-paper h3{color:var(--purple);border-bottom:1px solid var(--line);padding-bottom:8px;margin:24px 0 12px}.review-paper h3:first-child{margin-top:0}.review-list{list-style:none;padding:0;margin:0;display:grid;gap:8px}.review-list li{display:grid;grid-template-columns:310px 1fr;gap:12px;border-bottom:1px dashed #ddd;padding:6px 0}.review-list span{font-weight:800;color:#4f4a59}.review-list strong{font-weight:700;color:#222}.review-docs{width:100%;border-collapse:collapse;margin-top:8px}.review-docs th,.review-docs td{border:1px solid var(--line);padding:8px;text-align:left}.review-docs th{background:var(--soft);color:var(--purple)}.review-edit{border:1px solid var(--teal);background:#fff;color:var(--teal-dark);border-radius:5px;padding:6px 10px;font-weight:900;cursor:pointer;float:right}.disclaimer{border-left:4px solid var(--purple);background:#f7f3fb;color:#4a316a;padding:12px 14px;margin-top:18px;border-radius:0 6px 6px 0;font-weight:700}
+    footer{background:var(--purple);color:white;padding:24px 0}
+    .third-party-list{display:grid;gap:12px;margin:12px 0}.third-party-card{border:1px solid var(--line);border-radius:8px;background:#fbfafc;padding:14px}.third-party-card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;color:var(--purple);font-weight:900}.remove-third{border:1px solid #d8d2e2;border-radius:6px;background:#fff;color:var(--purple);min-height:32px;padding:0 10px;font-weight:800;cursor:pointer}.third-party-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.third-party-fields .full{grid-column:1/-1}.support-doc-fields{grid-template-columns:1fr}
+
+    .support-docs{border:1px solid var(--line);border-radius:8px;background:#fff;margin:14px 0;padding:14px}
+    .support-docs-title{color:var(--purple);font-weight:900;margin-bottom:8px}
+    .support-docs-note{margin:0 0 14px;color:var(--muted);font-style:italic}
+    .support-doc-list{display:grid;gap:12px;margin-bottom:12px}
+    .support-doc-item{border:1px solid var(--line);border-radius:8px;background:var(--soft-2);padding:12px}
+    .support-doc-fields{display:grid;grid-template-columns:minmax(0,1fr) 260px auto;gap:12px;align-items:end}
+    .support-doc-fields label{display:block;font-weight:800;color:#403b49;margin-bottom:6px}
+    .support-doc-fields input[type="text"]{width:100%;min-height:40px;border:1px solid #d9d4e3;border-radius:6px;padding:8px 10px}
+    .support-doc-fields input[type="file"]{width:100%;font-size:10.5pt}
+    .remove-support-doc{border:1px solid #d8d2e2;border-radius:6px;background:#fff;color:var(--purple);min-height:40px;padding:0 10px;font-weight:800;cursor:pointer}
+
+
+    /* Third-party accordion cards: same behavior/visual logic as 4.2 person accordions */
+    .third-party-card.accordion{padding:0;background:#fff}
+    .third-party-card.accordion .acc-head{margin:0}
+    .third-party-card.accordion .acc-body{background:#fff}
+    .third-party-card.accordion .third-party-fields{display:grid}
+    .third-party-card.accordion .remove-third{justify-self:end}
+
+    @media(max-width:1060px){.menu,.ministry{display:none}.app-shell{grid-template-columns:1fr}.side{position:static}.stepper{grid-template-columns:1fr 1fr}.license-options,.choice-grid{grid-template-columns:1fr}.choice.wide{grid-column:auto}.person-box{grid-template-columns:1fr}.declaration-fields{grid-template-columns:1fr}.review-list li{grid-template-columns:1fr}.doc-actions input[type="file"]{max-width:160px}}
+    @media(max-width:640px){.topbar{padding:0 18px}.brand{min-width:0}.brand-title{font-size:10.5pt}.mark{width:96px;height:40px;font-size:28px}.hero-inner,.wrap{width:min(100% - 28px,1240px)}.grid,.stepper{grid-template-columns:1fr}.panel-body{padding:16px}.doc-table{font-size:10.5pt}}
+    @media print{.topbar,.nav,.hero,.stepper,.side,.action-row,footer,.review-edit,.print-btn,.notice{display:none!important}.app-shell{display:block;padding:0}.panel{box-shadow:none;border:0}.panel-head{display:none}.panel-body{padding:0}.step-panel{display:none!important}#step-review{display:block!important}.review-paper{border:0;box-shadow:none;padding:0}body{font-size:11pt}}
+  
+/* FONT FIX: all application/form content in Times New Roman 12pt */
+.application,
+.application *,
+.panel,
+.panel *,
+.side,
+.side *,
+footer,
+footer * {
+  font-family: "Times New Roman", Times, serif !important;
+  font-size: 12pt !important;
+}
+input, select, textarea, button {
+  font-family: "Times New Roman", Times, serif !important;
+  font-size: 12pt !important;
+}
+.section-title,
+.panel-head h2,
+.step-title,
+.subsection-title,
+.review-title,
+.download-title {
+  font-family: "Times New Roman", Times, serif !important;
+  font-size: 12pt !important;
+}
+.progress-big,
+.progress-big *,
+.review-value,
+.review-value * {
+  font-family: "Times New Roman", Times, serif !important;
+  font-size: 12pt !important;
+}
+
+.review-warning{border-left:4px solid var(--danger);background:#fff7f7;color:#6b1f1f;margin-bottom:14px;}
+</style>
+</head>
+<body>
+<header>
+<div class="topbar"><div>✉ info@nacc.gov.al</div><div class="socials"><span>f</span><span>in</span></div></div>
+<nav class="nav"><div class="brand"><div class="mark">A<span class="green">K</span>KC</div><div class="brand-title">Agjencia Kombëtare e<br/>Kontrollit të Cannabis-it</div></div><div class="menu"><a href="#">Kreu</a><a href="#">Agjencia</a><a href="#">Legjislacioni</a><a class="active" href="#">Licensimi</a><a href="#">Lajme</a><a href="#">Punësim</a><a href="#">Publikime</a><a href="#">Projekte</a><a href="#">Lidhje</a><a href="#">Kontakt</a><span class="flag">🇬🇧</span></div><div class="ministry"><div class="building"></div>MINISTRIA E SHËNDETËSISË<br/>DHE MIRËQENIES SOCIALE</div></nav>
+<section class="hero"><div class="hero-inner"><div class="breadcrumb">Kreu/Licensimi/Aplikim për licencë</div><h1>Aplikim për pajisje me licencë</h1><div class="hero-line"></div><p>Fushat me * janë të detyrueshme. Aplikimi nuk mund të dorëzohet pa plotësuar të dhënat dhe pa ngarkuar dokumentet e kërkuara.</p></div></section>
+</header>
+<main>
+<div class="wrap app-shell">
+<form class="panel" id="applicationForm" novalidate="">
+<div class="panel-head"><h2>Formular aplikimi online</h2></div>
+<div class="panel-body">
+<div class="stepper" id="stepper"></div>
+
+
+
+
+
+
+
+<section class="step-panel active" data-step="0" id="step-applicant">
+<div class="section-title">1. TË DHËNAT E SUBJEKTIT DHE PËRFAQËSIMI NË APLIKIM</div>
+<div class="grid">
+<div class="field full"><label>Emri i subjektit (i personit juridik)<span class="req">*</span></label><input id="subjectName" required="" type="text"/></div>
+<div class="field"><label>Numri i Identifikimit (NUIS/NIPT)<span class="req">*</span></label><input id="nipt" required="" type="text"/></div>
+<div class="field"><label>Telefon<span class="req">*</span></label><input id="phone" required="" type="tel"/></div>
+<div class="field"><label>e-mail i subjektit<span class="req">*</span></label><input id="subjectEmail" required="" type="email"/></div>
+<div class="field full"><label>Adresa<span class="req">*</span></label><input id="address" required="" type="text"/></div>
+</div>
+<div class="filler-choice">
+<div class="filler-choice-title">Përfaqësimi në procedurën e aplikimit<span class="req">*</span></div>
+<div class="choice-grid">
+<label class="choice"><input name="applicationFiller" type="checkbox" value="Administratori/përfaqësuesi ligjor i subjektit"/> Administratori/përfaqësuesi ligjor i subjektit</label>
+<label class="choice"><input name="applicationFiller" type="checkbox" value="Personi i autorizuar nga subjekti aplikues"/> Personi i autorizuar nga subjekti aplikues</label>
+</div>
+</div>
+<div class="subsection-title">TË DHËNAT E PERSONIT QË KRYEN APLIKIMIN</div>
+<p class="section-note">Ky seksion plotësohet për personin që kryen aplikimin online. Nëse aplikimi kryhet nga personi i autorizuar, akti i përfaqësimit (autorizimi/prokura) duhet të ngarkohet.</p>
+<div class="notice" id="fillerNotice">Zgjidhni nëse aplikimi kryhet nga administratori/përfaqësuesi ligjor apo nga personi i autorizuar.</div>
+<div class="grid" id="representativeFields">
+<div class="field"><label>Emër<span class="req">*</span></label><input id="repFirstName" required="" type="text"/></div>
+<div class="field"><label>Mbiemër<span class="req">*</span></label><input id="repLastName" required="" type="text"/></div>
+<div class="field"><label>Atësi<span class="req">*</span></label><input id="repFatherName" required="" type="text"/></div>
+<div class="field"><label>Datëlindje<span class="req">*</span></label><input id="repBirthDate" required="" type="date"/></div>
+<div class="field"><label>Vendlindje<span class="req">*</span></label><input id="repBirthPlace" required="" type="text"/></div>
+<div class="field"><label>Vendbanim<span class="req">*</span></label><input id="repResidence" required="" type="text"/></div>
+<div class="field"><label>Nr. ID<span class="req">*</span></label><input id="repId" required="" type="text"/></div>
+<div class="field"><label>Adresë elektronike<span class="req">*</span></label><input id="repEmail" required="" type="email"/></div>
+<div class="field"><label>Numër telefoni<span class="req">*</span></label><input id="repPhone" required="" type="tel"/></div>
+<div class="field full" id="repAuthorityField" style="display:none"><label>Akti i përfaqësimit (autorizimi/prokura)<span class="req" id="repAuthorityReq">*</span></label><input accept=".pdf,.jpg,.jpeg,.png" id="repAuthority" type="file"/><p class="small-note" id="repAuthorityNote">Ngarkoni aktin e përfaqësimit kur aplikimi kryhet nga personi i autorizuar.</p></div>
+</div>
+<div class="action-row"><span></span><button class="nav-btn primary" data-next="" type="button">Vazhdo tek hapi tjetër</button></div>
+</section><section class="step-panel" data-step="1" id="step-licence">
+<div class="section-title">2. LLOJI I LICENCËS DHE TË DHËNAT E VEPRIMTARISË</div>
+<div class="subsection-title">2.1 VEPRIMTARIA PËR TË CILËN APLIKOHET</div>
+<p class="section-note">Mund të zgjidhen të treja veprimtaritë.</p>
+<div class="license-options">
+<label class="choice"><input name="licence" type="checkbox"/> Kultivim dhe prodhim i bimës së cannabis-it për qëllime mjekësore</label>
+<label class="choice"><input name="licence" type="checkbox"/> Transport i farërave, bimëve, nënprodukteve dhe produkteve të cannabis-it për qëllime mjekësore në territorin e Republikës së Shqipërisë</label>
+<label class="choice"><input name="licence" type="checkbox"/> Eksport i bimëve, nënprodukteve dhe produkteve të cannabis-it për qëllime mjekësore</label>
+</div>
+<div class="subsection-title">2.2 PËRSHKRIMI I AKTIVITETIT PËR TË CILIN KËRKOHET LICENCA</div>
+<div class="field full"><label>Përshkrimi i aktivitetit<span class="req">*</span></label><textarea id="activityDescription" required=""></textarea></div>
+<div class="subsection-title">2.3 NUMRI DHE SIPËRFAQJA E NJËSIVE</div>
+<p>Licenca mund të përfshijë deri në 4 njësi, të cilat duhet të jenë kufitare me njëra-tjetrën. Sipërfaqja e çdo njësie: minimumi 5 hektarë, maksimumi 10 hektarë (sipas pikës 7, të nenit 14, të ligjit nr. 61/2023).</p>
+<div class="choice-grid">
+<label class="choice"><input name="unitNumber" type="radio" value="1 njësi"/> 1 njësi</label>
+<label class="choice"><input name="unitNumber" type="radio" value="2 njësi"/> 2 njësi</label>
+<label class="choice"><input name="unitNumber" type="radio" value="3 njësi"/> 3 njësi</label>
+<label class="choice"><input name="unitNumber" type="radio" value="4 njësi"/> 4 njësi</label>
+</div>
+<div class="subsection-title">Ambienti i kultivimit</div>
+<div class="choice-grid">
+<label class="choice"><input name="cultivationEnv" type="checkbox" value="Ambient i hapur"/> Ambient i hapur</label>
+<label class="choice"><input name="cultivationEnv" type="checkbox" value="Ambient i mbuluar"/> Ambient i mbuluar</label>
+<label class="choice"><input name="cultivationEnv" type="checkbox" value="Serë"/> Serë</label>
+</div>
+<div class="field full" style="margin-top:16px"><label>Përshkruani sipërfaqen, koordinatat dhe vendndodhjen e secilës njësi të propozuar për licencim<span class="req">*</span></label><textarea id="unitsDescription" required=""></textarea></div>
+<div class="action-row"><button class="nav-btn" data-prev="" type="button">Kthehu</button><button class="nav-btn primary" data-next="" type="button">Vazhdo tek hapi tjetër</button></div>
+</section><section class="step-panel" data-step="2" id="step-thirdparty">
+<div class="section-title">3. AKTIVITETE QË DO TË KRYHEN NGA SUBJEKTE TË TRETA<span class="req">*</span></div>
+<div class="choice-grid">
+<label class="choice wide"><input name="thirdPartyOption" required="" type="radio" value="Vetëm aplikanti"/> Të gjitha aktivitetet do të kryhen tërësisht vetëm nga subjekti aplikues.</label>
+<label class="choice wide"><input name="thirdPartyOption" required="" type="radio" value="Subjekte të treta"/> Disa nga aktivitetet e parashikuara në licencë mund të kryhen, tërësisht ose pjesërisht, nga subjekte të treta të kontraktuara, në përputhje me pikën 5, të nenit 14, të ligjit nr. 61/2023, si dhe me marrëveshjet përkatëse.</label>
+</div>
+<div id="thirdPartyDetails" style="margin-top:16px;display:none">
+<label class="upload-label">Në rast se zgjidhet opsioni i dytë, shtoni të dhënat për çdo subjekt të tretë dhe ngarkoni marrëveshjen/dokumentin përkatës.</label>
+<div id="thirdPartyList" class="third-party-list"></div>
+<button class="draft" id="addThirdPartyBtn" type="button">+ Shto subjekt të tretë</button>
+</div>
+<div class="action-row"><button class="nav-btn" data-prev="" type="button">Kthehu</button><button class="nav-btn primary" data-next="" type="button">Vazhdo tek hapi tjetër</button></div>
+</section><section class="step-panel" data-step="3" id="step-docs">
+<div class="section-title">4. DOKUMENTACIONI</div>
+<p class="section-note"><em>Dokumentet ngarkohen në format PDF, JPG, JPEG ose PNG, me madhësi deri në 20 MB për dokument. Dokumentet duhet të jenë të plota dhe të lexueshme.</em></p>
+<div class="doc-collapse" id="mainDocsCollapse">
+  <button class="doc-collapse-head" type="button" data-doc-toggle="mainDocsCollapse">
+    <span>4.1 DOKUMENTACIONI I PËRGJITHSHËM</span>
+    <span class="doc-collapse-action">Hap dokumentet</span>
+  </button>
+  <div class="doc-collapse-body">
+    <table class="doc-table"><thead><tr><th style="width:48px">Nr.</th><th>Dokumenti</th><th style="width:130px">Statusi</th><th style="width:260px">Ngarko</th></tr></thead><tbody id="mainDocsBody"></tbody></table>
+  </div>
+</div>
+<div class="doc-collapse" id="figureDocsCollapse">
+  <button class="doc-collapse-head" type="button" data-doc-toggle="figureDocsCollapse">
+    <span>4.2 DOKUMENTACIONI PËR VERIFIKIMIN E PASTËRTISË SË FIGURËS</span>
+    <span class="doc-collapse-action">Hap dokumentet</span>
+  </button>
+  <div class="doc-collapse-body">
+    <p class="section-note">Ky seksion plotësohet për secilin person të deklaruar sipas rolit/funksionit në subjekt.</p>
+    <div class="person-box">
+    <div><label for="personName">Personi për të cilin po ngarkohen dokumentet <span class="req">*</span></label><input id="personName" placeholder="Emër Mbiemër" type="text"/></div>
+    <div><label for="personRole">Roli/Funksioni <span class="req">*</span></label><select id="personRole"><option>Administrator</option><option>Ortak/Aksionar</option><option>Anëtar organi drejtues</option><option>Drejtues teknik</option><option>Punonjës</option><option>Subjekt i tretë</option></select></div>
+    <div><button class="draft" id="addPersonBtn" type="button">+ Shto person tjetër</button></div>
+    </div>
+    <div id="peopleAccordions"></div>
+  </div>
+</div>
+<div class="support-docs" id="supportDocsSection">
+  <div class="support-docs-title">4.3 Dokumente të tjera mbështetëse</div>
+  <p class="support-docs-note">Nëse subjekti vlerëson se ka dokumente të tjera që mbështesin aplikimin, mund t’i ngarkojë në këtë seksion. Këto dokumente nuk zëvendësojnë dokumentacionin e detyrueshëm të kërkuar në seksionet 4.1 dhe 4.2.</p>
+  <div class="support-doc-list" id="supportDocList"></div>
+  <button class="draft" id="addSupportDocBtn" type="button">+ Shto dokument tjetër</button>
+</div>
+<div class="action-row"><button class="nav-btn" data-prev="" type="button">Kthehu</button><button class="nav-btn primary" data-next="" type="button">Vazhdo tek hapi tjetër</button></div>
+</section><section class="step-panel" data-step="4" id="step-declarations">
+<div class="section-title">5. FORMULARI I VETËDEKLARIMEVE</div>
+
+
+<div class="selfdeclarations" id="selfDeclarations">
+<div class="self-card"><label class="self-check"><input class="declaration-check" type="checkbox"/> A. PUNËSIMI I PERSONELIT <span class="req">*</span></label><p>Deklaroj se shoqëria do të punësojë personelin sipas kritereve dhe kushteve të germës “dh”, të pikës 2, të nenit 15, të ligjit nr. 61/2023 dhe Udhëzimit nr. 274, datë 16.05.2024, të ndryshuar:</p><ul><li>Të paktën 10 persona të punësuar për çdo njësi prodhimi.</li><li>Të paktën 2 persona me kualifikim në fushën e farmacisë dhe/ose agroinxhinierisë, me përvojë pune jo më pak se 3 vjet në fushën përkatëse.</li><li>Personeli i punësuar plotëson kriteret etiko-profesionale dhe të pastërtisë së figurës sipas Udhëzimit nr. 274/2024, të ndryshuar.</li></ul></div>
+<div class="self-card"><label class="self-check"><input class="declaration-check" type="checkbox"/> B. GATISHMËRIA PËR MARRËVESHJE ME MINISTRINË PËRGJEGJËSE PËR RENDIN DHE SIGURINË PUBLIKE <span class="req">*</span></label><p>Deklaroj gatishmërinë e shoqërisë për të lidhur marrëveshje me strukturën përgjegjëse të Ministrisë për rendin dhe sigurinë publike, në nivel qendror dhe vendor, sipas germës "e", pikës 2, nenit 15 të ligjit nr. 61/2023, për:</p><ul><li>Garantimin e aksesit për inspektim ndaj shoqërisë private të sigurisë fizike që mbikëqyr mjediset e kultivimit të bimës së cannabis-it dhe prodhimit të nënprodukteve dhe produkteve të saj.</li><li>Respektimin e rregullave të lëvizjes së automjeteve të dedikuara të transportit të lëndëve të para dhe produkteve, sipas VKM-së nr. 8, datë 9.01.2025.</li></ul></div>
+<div class="self-card"><label class="self-check"><input class="declaration-check" type="checkbox"/> C. FILLIMI I USHTRIMIT TË VEPRIMTARISË BRENDA 12 MUAJVE <span class="req">*</span></label><p>Deklaroj se shoqëria do të fillojë ushtrimin e veprimtarive të përshkruara në licencë brenda 12 (dymbëdhjetë) muajve nga data e miratimit të licencës, që përfshijnë ngritjen e infrastrukturës, zbatimin e standardeve të sigurisë, punësimin e personelit dhe lidhjen e marrëveshjeve të nevojshme, sipas germës "ë", pikës 2, të nenit 15, ligjit nr. 61/2023.</p></div>
+<div class="self-card"><label class="self-check"><input class="declaration-check" type="checkbox"/> D. TARIFA VJETORE <span class="req">*</span></label><p>Deklaroj se pas periudhës 3-vjeçare nga licencimi, shoqëria do të kryejë çdo vit pagesën e tarifës vjetore të barabartë me 1.5% të qarkullimit vjetor, por, në çdo rast, jo më pak se 10 000 000 (dhjetë milionë) lekë, sipas germës "f", pikës 2, të nenit 15 të ligjit nr. 61/2023.</p></div>
+<div class="self-card"><label class="self-check"><input class="declaration-check" type="checkbox"/> E. GARANCIA BANKARE <span class="req">*</span></label><p>Deklaroj se shoqëria do të kryejë pagesën e garancisë bankare në masën 10% të vlerës së investimit, brenda afatit 30-ditor pas perfundimit të fazës së ankimit dhe njoftimit zyrtar nga Agjencia, sipas germës “g”, të pikës 2, të nenit 15, të ligjit nr. 61/2023.</p></div>
+<div class="self-card"><label class="self-check"><input class="declaration-check" type="checkbox"/> F. GJURMUESHMËRIA DHE KRYERJA E PAGESAVE TË SISTEMIT TË GJURMIMIT <span class="req">*</span></label><p>Deklaroj gatishmërinë e shoqërisë për plotësimin e të gjitha kërkesave të gjurmueshmërisë, sipas parashikimeve të germës “gj” dhe “i”, të pikës 2, të nenit 15, të ligjit nr. 61/2023:</p><ul><li>Pajisjen me etiketë për bimën, nënproduktet dhe produktet e cannabis-it;</li><li>Disponibilitetin për kryerjen e pagesave të tarifave të sistemit të gjurmimit, sipas parashikimeve ligjore;</li><li>Plotësimin e të gjitha kërkesave teknike dhe operacionale të sistemit të gjurmueshmërisë.</li></ul></div>
+<div class="self-card"><label class="self-check"><input class="declaration-check" type="checkbox"/> G. PROCESET QË KRYHEN NGA SUBJEKTE TË TRETA <span class="req">*</span></label><p>Deklaroj se proceset që do të kryhen nga subjekte të treta dhe identifikimi i tyre me të dhëna të sakta janë pasqyruar në këtë vetëdeklarim, me qëllim mundësimin e vlerësimit dhe verifikimit, sipas germës “h”, të pikës 2, të nenit 15 të ligjit nr. 61/2023:</p>
+<div id="declarationThirdPartyList" class="third-party-list">
+  <div class="third-party-card g-third-party-card accordion open">
+    <button class="acc-head" type="button"><span class="third-party-title">Subjekti i tretë 1</span><span>⌄</span></button>
+    <div class="acc-body">
+      <div class="third-party-fields">
+        <div class="field"><label>Emri i subjektit (i personit juridik)</label><input class="gtp-name" type="text"/></div>
+        <div class="field"><label>Numri i Identifikimit (NUIS/NIPT)</label><input class="gtp-nipt" type="text"/></div>
+        <div class="field full"><label>Adresa</label><input class="gtp-address" type="text"/></div>
+        <div class="field"><label>Emri dhe mbiemri i Administratorit</label><input class="gtp-admin" type="text"/></div>
+        <div class="field"><label>Telefon</label><input class="gtp-phone" type="tel"/></div>
+        <div class="field"><label>e-mail</label><input class="gtp-email" type="email"/></div>
+        <div class="field full"><label>Objekti i marrëveshjes/Përshkrim i shërbimit ose aktivitetit që do të kryejë pala e tretë</label><textarea class="gtp-object"></textarea></div>
+      </div>
+    </div>
+  </div>
+</div>
+<button type="button" class="draft" id="addDeclarationThirdPartyBtn">+ Shto subjekt të tretë</button>
+<p class="small-note">Pas pajisjes me licencë, subjekti dorëzon pranë Agjencisë kontratat e lidhura me subjektet e treta brenda 5 ditëve nga nënshkrimi i tyre.</p></div><div class="self-card"><label class="self-check"><input class="declaration-check" type="checkbox"/> H. MARRËVESHJE PARAPRAKE PËR RUAJTJEN DHE SIGURINË FIZIKE <span class="req">*</span></label><p>Deklaroj se shoqëria ka lidhur marrëveshjen e sigurisë fizike me SHPSF-në, sipas germës “dh” të nenit 16, të ligjit nr. 61/2023, duke përmbushur kushtet e përcaktuara nga struktura përgjegjëse e Ministrisë për rendin dhe sigurinë publike, dhe angazhohem të njoftoj menjëherë Agjencinë për çdo ndryshim.</p><div class="declaration-fields"><div class="field"><label>Emri i shoqërisë SHPSF<span class="req">*</span></label><input id="shpsfName" required="" type="text"/></div><div class="field"><label>Numri i Identifikimit (NUIS/NIPT)<span class="req">*</span></label><input id="shpsfNipt" required="" type="text"/></div><div class="field full"><label>Adresa<span class="req">*</span></label><input id="shpsfAddress" required="" type="text"/></div><div class="field"><label>Emri dhe mbiemri i Administratorit<span class="req">*</span></label><input id="shpsfAdmin" required="" type="text"/></div><div class="field"><label>Telefon<span class="req">*</span></label><input id="shpsfPhone" required="" type="tel"/></div><div class="field"><label>e-mail<span class="req">*</span></label><input id="shpsfEmail" required="" type="email"/></div><div class="field full"><label>Objekti i marrëveshjes<span class="req">*</span></label><input id="securityObject" required="" type="text"/></div><div class="field"><label>Kohëzgjatja<span class="req">*</span></label><input id="securityDuration" required="" type="text"/></div><div class="field"><label>Marrëveshja e sigurisë fizike<span class="req">*</span></label><input id="securityAgreement" data-label="Marrëveshja e sigurisë fizike" required="" type="file" accept=".pdf,.jpg,.jpeg,.png"/></div></div></div>
+</div>
+<div class="declare-action"><button id="declareBtn" type="button">Deklaroj</button></div>
+<div class="action-row"><button class="nav-btn" data-prev="" type="button">Kthehu</button><button class="nav-btn primary" data-next="" type="button">Vazhdo tek hapi tjetër</button></div>
+</section><section class="step-panel" data-step="5" id="step-review">
+<div class="section-title">6. RISHIKIMI I APLIKIMIT</div>
+<div class="notice">Përpara dërgimit të aplikimit, ju lutemi kontrolloni me kujdes të gjitha të dhënat e plotësuara dhe dokumentet e ngarkuara.</div>
+<div class="disclaimer review-warning">Çdo deklarim i rreme, fshehje e të dhënave ose paraqitje dokumentacioni te falsifikuar sjell refuzimin ose përjashtimin e aplikimit, pezullimin/shfuqizimin e licencës kur zbulohet pas licencimit, njoftimin e organeve kompetente dhe përgjegjësi penale sipas Kodit Penal të Republikës së Shqipërisë.</div>
+<div style="text-align:right;margin-bottom:12px"><button class="print-btn" id="printBtn" type="button">Printo</button></div>
+<div class="review-paper" id="reviewContent"></div>
+<div class="disclaimer">Për çdo paqartësi ose pyetje lidhur me aplikimin, mund të kontaktoni Agjencinë në adresën info@nacc.gov.al.</div>
+<div class="action-row"><button class="nav-btn" data-prev="" type="button">Kthehu</button><button class="nav-btn primary" id="finalSubmitBtn" type="button">Dërgo aplikimin</button></div>
+</section></div>
+</form>
+<aside class="side">
+  <div class="panel side-progress">
+    <div class="panel-head"><h2>Progresi i aplikimit</h2></div>
+    <div class="panel-body">
+      <div class="progress-big"><span id="uploaded">0</span>/<span id="total">6</span></div>
+      <div class="bar"><span id="bar"></span></div>
+      <button class="submit" disabled="" id="submitBtn">Dërgo aplikimin</button>
+      <p class="side-note" id="submitHelp">Plotësoni seksionet e aplikimit për të vazhduar.</p>
+      <div class="missing-dropdown"><button class="missing-toggle" id="missingToggle" type="button">Seksionet e paplotësuara ▾</button><div class="missing-menu" id="missingMenu"></div></div>
+    </div>
+  </div>
+  <div class="panel download-panel">
+    <div class="panel-head"><h2>Dokumente për aplikimin</h2></div>
+    <div class="panel-body">
+      <p class="download-intro">Konsultoni dokumentet shoqëruese të procedurës.</p>
+      <a class="download-link" href="#">Paketa e aplikimit</a>
+      <a class="download-link" href="#">Manuali i procedurave për pajisjen me licencë</a>
+      <a class="download-link" href="#">Metodologjia e vlerësimit</a>
+    </div>
+  </div>
+</aside>
+</div>
+</main>
+<footer><div class="wrap">Agjencia Kombëtare e Kontrollit të Cannabis-it · Licensimi · Aplikim online</div></footer>
+<script>
+const steps=['Të dhënat e subjektit dhe përfaqësimi','Lloji i licencës dhe të dhënat e veprimtarisë','Aktivitete nga subjekte të treta','Dokumentacioni','Deklarime','Rishikimi i aplikimit'];
+const mainDocs=[['Kërkesë për licencë','Faqe 6 - 12 e paketës së aplikimit'],['Mandati i arkëtimit të pagesës së tarifës së aplikimit','Mandat bankar për pagesën e tarifës pranë një banke të nivelit të dytë'],['Të dhënat e njësisë: koordinatat dhe marrëdhënia juridike me tokën','Certifikatë pronësie/kartelë/fragment hartë kadastrale ose kontratë qiraje e noterizuar për 15 vjet'],['Plani i zhvillimit të biznesit','Modeli i kultivimit, analiza e tregut, plan marketingu, strukturë organizative, impakt mjedisor, plan operacional dhe financiar'],['Planvendosja e ambienteve brenda njësisë','Skemë teknike/inxhinierike, leje mjedisore/ndërtimore, sisteme teknike, projekt elektrik dhe hidraulik'],['Plani i sigurisë','Sipas kritereve dhe kushteve të VKM-së nr. 8, datë 09.01.2025'],['Deklaratë noteriale','Sipas shtojcës nr. 7 dhe Udhëzimit nr. 5, datë 20.1.2025'],['Certifikatë e regjistrimit në QKB','Kopje e njësuar me origjinalin'],['Ekstrakt historik i subjektit juridik; akti i themelimit dhe statuti; lista e pronarëve përfitues','Gjeneruar nga portali e-Albania me vulë elektronike; vlefshmëri 3 muaj'],['Certifikata e Sigurisë Industriale (CSI)','Lëshuar nga AKSIK; vlefshmëri deri 5 vjet'],['Dokument që vërteton kapital jo më të vogël se 100 000 000 lekë','Mandati bankar ose vërtetimi i noterit për pagesën e kapitalit në para'],['Vërtetim nga organi përmbarues','Provon se subjekti nuk është në ekzekutim të detyrueshëm; vlefshmëri 30 ditë'],['Vërtetim që subjekti, ortakët ose aksionarët nuk janë në procedurë falimentimi','Lëshuar nga Gjykata e Rrethit Gjyqësor; vlefshmëri 6 muaj'],['Pasqyrat financiare të subjektit dhe aksionarëve për 3 vitet e fundit','Pasqyra financiare të audituara, në PDF'],['Dokumente që vërtetojnë përvojën jo më pak se 3 vjet','Regjistër tregtar, kontrata, fatura, certifikata, kontrata pune ose certifikata shërbimi'],['Dokument për ushtrimin e veprimtarisë në vendet e OECD për të paktën 5 vjet','Certifikata regjistrimi, licenca, kontrata, vërtetime nga autoritetet kompetente ose dokumente ekuivalente'],['Dokument që vërteton praktikat e mira të prodhimit për të paktën 3 vjet','Certifikatë EU-GMP, deklaratë cGMP ose raport inspektimi FDA'],['Vërtetim nga organet tatimore për shlyerjen e detyrimeve tatimore','Portali e-Albania, shërbimi “Vërtetim për pagim detyrimesh”'],['Rregullore e brendshme e funksionimit të aktivitetit','Proceset e brendshme administrative dhe operacionale të veprimtarisë']];
+const figureDocs=[['Jetëshkrim','Format standard Europass; plotësuar dhe nënshkruar'],['Deklarim për dhënien e pëlqimit për përpunimin e të dhënave personale','Sipas Aneksit të Udhëzimit nr. 274/2024, të ndryshuar'],['Vetëdeklarim për konfliktin e interesit','Sipas Aneksit të Udhëzimit nr. 274/2024, të ndryshuar'],['Vetëdeklarim për masat disiplinore','Sipas Aneksit të Udhëzimit nr. 274/2024, të ndryshuar'],['Vetëdeklarim sipas shtojcës nr. 6','Sipas Aneksit të Udhëzimit nr. 274/2024, të ndryshuar'],['Fotokopje e kartës së identitetit ose pasaportës','Kopje e lexueshme në PDF'],['Certifikatë e gjendjes familjare/personale','Drejtoria e Përgjithshme e Gjendjes Civile; portali e-Albania'],['Vërtetim nga Instituti i Mjekësisë Ligjore (IML), që nuk është përdorues droge','Shënim *: Ky dokument kërkohet për personat fizikë të angazhuar në funksione operacionale, teknike, drejtuese ose sigurie, sipas udhëzimit përkatës. Për kategoritë e tjera, dokumenti kërkohet vetëm kur është i nevojshëm, i zbatueshëm dhe proporcional me funksionin konkret të personit në subjekt.'],['Certifikatë e gjendjes gjyqësore','Drejtoria e Përgjithshme e Burgjeve; portali e-Albania; vlefshmëri 3 muaj'],['Vërtetim nga organi gjyqësor','Provon se aplikanti nuk është në gjykim për vepër penale; vlefshmëri 3 muaj'],['Vërtetim nga prokuroria','Vërteton se aplikanti nuk është në ndjekje penale'],['Vërtetim nga SPAK','Vërteton se nuk është në hetim për fushat e përcaktuara në dokumentacion'],['Fotokopje e librezës së punës','Për punësime jashtë vendit kërkohet vërtetim nga autoriteti përkatës'],['Fotokopje e noterizuar e diplomës së arsimit të lartë','Diplomat jashtë vendit duhet të jenë të njohura dhe të njësuara'],['Vërtetim i gjendjes shëndetësore','Për shtetasit e huaj jo rezidentë lëshohet nga autoriteti i vendit të origjinës'],['Çdo dokument tjetër vërtetues i kualifikimeve, trajnimeve ose vlerësimeve pozitive','Sipas informacionit të deklaruar në jetëshkrim']];
+let currentStep=0;let people=[{id:1,name:'Personi 1',role:'Administrator',open:false}];let nextPersonId=2;let thirdParties=[];let nextThirdPartyId=1;
+const stepper=document.getElementById('stepper');steps.forEach((s,i)=>{const b=document.createElement('button');b.type='button';b.className='step';b.dataset.goto=i;b.innerHTML='<strong>'+(i+1)+'. '+s+'</strong>';stepper.appendChild(b)});
+function renderDocRows(docs,prefix){return docs.map((d,i)=>'<tr class="doc-row"><td>'+(i+1)+'</td><td><div class="doc-name">'+escapeHtml(d[0])+'<span class="req">*</span></div><p class="doc-help">'+escapeHtml(d[1])+'</p></td><td><span class="doc-status">Mungon</span></td><td class="doc-actions"><input required data-label="'+escapeHtml(d[0])+'" type="file" accept=".pdf,.jpg,.jpeg,.png"></td></tr>').join('')}
+document.getElementById('mainDocsBody').innerHTML=renderDocRows(mainDocs,'main');
+function renderPeople(){const box=document.getElementById('peopleAccordions');box.innerHTML=people.map((p,idx)=>'<div class="accordion '+(p.open?'open':'')+'" data-person="'+p.id+'"><button class="acc-head" type="button"><span>'+escapeHtml(p.name)+'<small>'+escapeHtml(p.role)+'</small></span><span>⌄</span></button><div class="acc-body"><div style="display:flex;justify-content:flex-end;margin-bottom:10px">'+(people.length>1?'<button type="button" class="remove-person" data-remove="'+p.id+'">Fshi</button>':'')+'</div><table class="doc-table"><thead><tr><th style="width:48px">Nr.</th><th>Dokumenti</th><th style="width:130px">Statusi</th><th style="width:260px">Ngarko</th></tr></thead><tbody>'+renderDocRows(figureDocs,'figure-'+p.id)+'</tbody></table></div></div>').join('');updateState()}
+renderPeople();
+function renderThirdParties(){
+  const box=document.getElementById('thirdPartyList');
+  if(!box)return;
+  box.innerHTML=thirdParties.map((p,idx)=>'<div class="third-party-card accordion open" data-third-party="'+p.id+'"><button class="acc-head" type="button"><span class="third-party-title">Subjekti i tretë '+(idx+1)+'</span><span>⌄</span></button><div class="acc-body"><div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button type="button" class="remove-third" data-remove-third="'+p.id+'">Fshi</button></div><div class="third-party-fields"><div class="field"><label>Emri i subjektit (i personit juridik)<span class="req">*</span></label><input class="tp-name" type="text" placeholder="Emri i subjektit të tretë"/></div><div class="field"><label>Numri i Identifikimit (NUIS/NIPT)<span class="req">*</span></label><input class="tp-nipt" type="text"/></div><div class="field full"><label>Adresa<span class="req">*</span></label><input class="tp-address" type="text"/></div><div class="field"><label>Emri dhe mbiemri i Administratorit<span class="req">*</span></label><input class="tp-admin" type="text"/></div><div class="field"><label>Telefon<span class="req">*</span></label><input class="tp-phone" type="tel"/></div><div class="field"><label>e-mail<span class="req">*</span></label><input class="tp-email" type="email"/></div><div class="field full"><label>Përshkrim i shërbimit ose aktivitetit që do të kryejë pala e tretë<span class="req">*</span></label><textarea class="tp-object"></textarea></div><div class="field full"><label>Marrëveshja noteriale/dokument mbështetës<span class="req">*</span></label><input class="tp-file" type="file" accept=".pdf,.jpg,.jpeg,.png" required/></div></div></div></div>').join('');
+  refreshThirdPartyLabels();
+}
+renderThirdParties();
+
+function gotoStep(i){currentStep=Math.max(0,Math.min(steps.length-1,i));document.querySelectorAll('.step-panel').forEach(p=>p.classList.toggle('active',Number(p.dataset.step)===currentStep));document.querySelectorAll('.step').forEach((s,idx)=>s.classList.toggle('active',idx===currentStep));populateReview();updateState();window.scrollTo({top:document.querySelector('.panel').offsetTop-100,behavior:'smooth'})}
+document.addEventListener('click',e=>{if(e.target.closest('[data-next]'))gotoStep(currentStep+1);if(e.target.closest('[data-prev]'))gotoStep(currentStep-1);const g=e.target.closest('[data-goto]');if(g)gotoStep(Number(g.dataset.goto));const docToggle=e.target.closest('[data-doc-toggle]');if(docToggle){const panel=document.getElementById(docToggle.dataset.docToggle);panel.classList.toggle('open');const action=panel.querySelector('.doc-collapse-action');if(action)action.textContent=panel.classList.contains('open')?'Mbyll dokumentet':'Hap dokumentet'}const acc=e.target.closest('.acc-head');if(acc){acc.closest('.accordion').classList.toggle('open')}const rem=e.target.closest('[data-remove]');if(rem){people=people.filter(p=>p.id!==Number(rem.dataset.remove));renderPeople()}const remThird=e.target.closest('[data-remove-third]');if(remThird){thirdParties=thirdParties.filter(p=>p.id!==Number(remThird.dataset.removeThird));renderThirdParties();updateState();}const thirdHead=e.target.closest('[data-third-toggle]');if(thirdHead && !e.target.closest('button')){const card=thirdHead.closest('.third-party-card');card.classList.toggle('collapsed');card.classList.toggle('open');const t=card.querySelector('.third-party-toggle');if(t)t.textContent=card.classList.contains('collapsed')?'›':'⌄'}const jump=e.target.closest('[data-jump]');if(jump){gotoStep(Number(jump.dataset.jump))}});
+document.getElementById('addThirdPartyBtn').addEventListener('click',()=>{thirdParties.push({id:nextThirdPartyId++});renderThirdParties();updateState();});
+
+function refreshDeclarationThirdPartyLabels(){
+  document.querySelectorAll('#declarationThirdPartyList .g-third-party-card').forEach((card,idx)=>{
+    const title=card.querySelector('.third-party-title');
+    const name=card.querySelector('.gtp-name')?.value.trim();
+    if(title) title.textContent=name || ('Subjekti i tretë '+(idx+1));
+    const remove=card.querySelector('.remove-g-third');
+    if(remove) remove.style.display=idx===0?'none':'inline-flex';
+  });
+}
+function refreshThirdPartyLabels(){
+  document.querySelectorAll('#thirdPartyList .third-party-card').forEach((card,idx)=>{
+    const title=card.querySelector('.third-party-title');
+    const name=card.querySelector('.tp-name')?.value.trim();
+    if(title) title.textContent=name || ('Subjekti i tretë '+(idx+1));
+  });
+}
+function createDeclarationThirdPartyCard(){
+  const card=document.createElement('div');
+  card.className='third-party-card g-third-party-card accordion open';
+  card.innerHTML='<button class="acc-head" type="button"><span class="third-party-title">Subjekti i tretë</span><span>⌄</span></button><div class="acc-body"><div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button type="button" class="remove-third remove-g-third">Fshi</button></div><div class="third-party-fields"><div class="field"><label>Emri i subjektit (i personit juridik)</label><input class="gtp-name" type="text" placeholder="Emri i subjektit të tretë"/></div><div class="field"><label>Numri i Identifikimit (NUIS/NIPT)</label><input class="gtp-nipt" type="text"/></div><div class="field full"><label>Adresa</label><input class="gtp-address" type="text"/></div><div class="field"><label>Emri dhe mbiemri i Administratorit</label><input class="gtp-admin" type="text"/></div><div class="field"><label>Telefon</label><input class="gtp-phone" type="tel"/></div><div class="field"><label>e-mail</label><input class="gtp-email" type="email"/></div><div class="field full"><label>Objekti i marrëveshjes/Përshkrim i shërbimit ose aktivitetit që do të kryejë pala e tretë</label><textarea class="gtp-object"></textarea></div></div></div>';
+  return card;
+}
+document.getElementById('addDeclarationThirdPartyBtn')?.addEventListener('click',()=>{
+  document.getElementById('declarationThirdPartyList').appendChild(createDeclarationThirdPartyCard());
+  refreshDeclarationThirdPartyLabels();
+  updateState();
+});
+document.getElementById('declarationThirdPartyList')?.addEventListener('click',e=>{
+  if(!e.target.classList.contains('remove-g-third')) return;
+  e.target.closest('.g-third-party-card')?.remove();
+  refreshDeclarationThirdPartyLabels();
+  updateState();
+});
+refreshDeclarationThirdPartyLabels();
+document.getElementById('addPersonBtn').addEventListener('click',()=>{const n=document.getElementById('personName');const r=document.getElementById('personRole');if(!n.value.trim()){n.classList.add('invalid');n.focus();return}people.push({id:nextPersonId++,name:n.value.trim(),role:r.value,open:true});n.value='';n.classList.remove('invalid');renderPeople()});
+document.getElementById('declareBtn').addEventListener('click',()=>{document.querySelectorAll('.declaration-check').forEach(c=>c.checked=true);updateState();populateReview()});
+document.getElementById('missingToggle').addEventListener('click',()=>document.getElementById('missingMenu').classList.toggle('open'));
+document.getElementById('submitBtn').addEventListener('click',()=>gotoStep(5));document.getElementById('finalSubmitBtn').addEventListener('click',()=>{if(!sectionStatus().allCore){alert('Aplikimi nuk është i plotësuar. Ju lutemi plotësoni seksionet e paplotësuara.');return}alert('Aplikimi u dërgua për shqyrtim. Dorëzimi nuk nënkupton miratim të licencës.')});
+function isFilled(input){if(input.type==='checkbox'||input.type==='radio')return input.checked;if(input.type==='file')return input.files.length>0;if(input.type==='email')return input.value.trim().includes('@')&&input.value.trim().includes('.');return input.value.trim().length>0}
+function radioDone(name){return document.querySelectorAll('input[name="'+name+'"]:checked').length>0}
+function checkDone(name){return document.querySelectorAll('input[name="'+name+'"]:checked').length>0}
+function getStats(){
+  const filler=selected('applicationFiller');
+  const repNeedsFile=filler==='Personi i autorizuar nga subjekti aplikues';
+  const applicantInputs=[...document.querySelectorAll('#step-applicant input[required]:not([type="checkbox"]):not([type="file"])')];
+  const applicantCoreDone=applicantInputs.filter(isFilled).length;
+  const repFile=document.getElementById('repAuthority');
+  const repAuthorityField=document.getElementById('repAuthorityField');
+  if(repAuthorityField) repAuthorityField.style.display=repNeedsFile?'block':'none';
+  if(!repNeedsFile && repFile) repFile.value='';
+  document.getElementById('fillerNotice').textContent=filler==='—'?'Zgjidhni nëse aplikimi kryhet nga administratori/përfaqësuesi ligjor apo nga personi i autorizuar.':'Aplikimi po kryhet nga: '+filler+'.';
+  const applicantDone=applicantCoreDone+(radioDone('applicationFiller')?1:0)+(repNeedsFile&&isFilled(repFile)?1:0);
+  const applicantTotal=applicantInputs.length+1+(repNeedsFile?1:0);
+  const activityDone=(checkDone('licence')&&isFilled(document.getElementById('activityDescription'))&&radioDone('unitNumber')&&checkDone('cultivationEnv')&&isFilled(document.getElementById('unitsDescription')))?1:0;
+  const mainFiles=[...document.querySelectorAll('#mainDocsBody input[type="file"]')];
+  const mainDone=mainFiles.filter(isFilled).length;
+  const peopleFiles=[...document.querySelectorAll('#peopleAccordions input[type="file"]')];
+  const peopleDone=peopleFiles.filter(isFilled).length;
+  const thirdOption=selected('thirdPartyOption');const thirdDetails=document.getElementById('thirdPartyDetails');if(thirdDetails)thirdDetails.style.display=thirdOption==='Subjekte të treta'?'block':'none';const thirdCards=[...document.querySelectorAll('.third-party-card')];const thirdComplete=thirdCards.length>0&&thirdCards.every(card=>[...card.querySelectorAll('input,textarea')].every(isFilled));const thirdDone=thirdOption==='Vetëm aplikanti'?1:(thirdOption==='Subjekte të treta'&&thirdComplete?1:0);
+  const decl=[...document.querySelectorAll('.declaration-check')];
+  const shpsf=[...document.querySelectorAll('#step-declarations input[required]')];
+  const declDone=(decl.every(isFilled)&&shpsf.every(isFilled))?1:0;
+  return{applicant:applicantInputs,applicantDone,applicantTotal,activityDone,mainFiles,mainDone,peopleFiles,peopleDone,thirdDone,declDone,decl,totalDocs:mainFiles.length+peopleFiles.length}
+}
+function sectionStatus(){const s=getStats();const docsDone=s.mainDone===s.mainFiles.length&&s.peopleDone===s.peopleFiles.length;const core=[{label:'Të dhënat e subjektit dhe përfaqësimi',step:0,done:s.applicantDone===s.applicantTotal},{label:'Lloji i licencës dhe të dhënat e veprimtarisë',step:1,done:s.activityDone===1},{label:'Aktivitetet nga subjekte të treta',step:2,done:s.thirdDone===1},{label:'Dokumentacioni',step:3,done:docsDone},{label:'Deklarime',step:4,done:s.declDone===1}];const coreDone=core.filter(x=>x.done).length;const allCore=coreDone===core.length;const allSections=[...core,{label:'Rishikimi i aplikimit',step:5,done:allCore}];return{s,core,allSections,doneSections:coreDone+(allCore?1:0),totalSections:6,allCore}}
+function updateFileStatuses(){document.querySelectorAll('input[type="file"]').forEach(input=>{const row=input.closest('tr');if(row){const st=row.querySelector('.doc-status');if(input.files.length){st.textContent='Ngarkuar';st.classList.add('ok')}else{st.textContent='Mungon';st.classList.remove('ok')}}})}
+function updateState(){updateFileStatuses();const ss=sectionStatus();document.getElementById('uploaded').textContent=ss.doneSections;document.getElementById('total').textContent=ss.totalSections;document.getElementById('bar').style.width=(ss.doneSections/ss.totalSections*100)+'%';document.querySelectorAll('.step').forEach((st,i)=>st.classList.toggle('done',ss.allSections[i]?.done));document.getElementById('submitBtn').disabled=!ss.allCore;document.getElementById('finalSubmitBtn').disabled=!ss.allCore;document.getElementById('submitHelp').textContent=ss.allCore?'Aplikimi është gati për dërgim.':'Plotësoni seksionet e paplotësuara për të vazhduar.';const miss=ss.allSections.filter(x=>!x.done);document.getElementById('missingMenu').innerHTML=miss.length?miss.map(m=>'<button type="button" data-jump="'+m.step+'">'+escapeHtml(m.label)+'</button>').join(''):'<button type="button">Të gjitha seksionet janë plotësuar</button>';populateReview()}
+function value(id){const el=document.getElementById(id);if(!el)return '—';if(el.type==='file')return el.files.length?el.files[0].name:'—';if(el.type==='checkbox')return el.checked?'Po':'Jo';return el.value.trim()||'—'}
+function selected(name){return [...document.querySelectorAll('input[name="'+name+'"]:checked')].map(i=>i.value||i.parentElement.textContent.trim()).join('; ')||'—'}
+function escapeHtml(v){return String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function row(label,val){return '<li><span>'+escapeHtml(label)+'</span><strong>'+escapeHtml(val)+'</strong></li>'}
+function edit(step){return '<button type="button" class="review-edit" data-jump="'+step+'">Ndrysho</button>'}
+
+function thirdPartyReview(){const cards=[...document.querySelectorAll('.third-party-card')];if(!cards.length)return '<ul class="review-list">'+row('Subjektet e treta','—')+'</ul>';return cards.map((card,i)=>'<h4>Subjekti i tretë '+(i+1)+'</h4><ul class="review-list">'+row('Emri i subjektit',card.querySelector('.tp-name')?.value||'—')+row('NUIS/NIPT',card.querySelector('.tp-nipt')?.value||'—')+row('Adresa',card.querySelector('.tp-address')?.value||'—')+row('Administratori',card.querySelector('.tp-admin')?.value||'—')+row('Telefon',card.querySelector('.tp-phone')?.value||'—')+row('e-mail',card.querySelector('.tp-email')?.value||'—')+row('Përshkrimi i shërbimit/aktivitetit',card.querySelector('.tp-object')?.value||'—')+row('Marrëveshja/dokumenti mbështetës',card.querySelector('.tp-file')?.files?.length?card.querySelector('.tp-file').files[0].name:'—')+'</ul>').join('')}
+
+function addSupportDoc(desc='', fileLabel=''){
+  const list=document.getElementById('supportDocList');
+  if(!list)return;
+  const index=list.querySelectorAll('.support-doc-item').length+1;
+  const item=document.createElement('div');
+  item.className='support-doc-item';
+  item.innerHTML='<div class="support-doc-fields"><div><label>Përshkrimi i dokumentit</label><input type="text" class="support-desc" placeholder="P.sh. dokument mbështetës shtesë" value="'+escapeHtml(desc)+'"></div><div><label>Dokumenti</label><input type="file" class="support-file" accept=".pdf,.jpg,.jpeg,.png"></div><button type="button" class="remove-support-doc">Fshi</button></div>';
+  item.querySelector('.remove-support-doc').addEventListener('click',()=>{item.remove();updateState();});
+  item.querySelectorAll('input').forEach(el=>{el.addEventListener('input',updateState);el.addEventListener('change',updateState);});
+  list.appendChild(item);
+  updateState();
+}
+function declarationThirdPartyReview(){
+  const allCards=[...document.querySelectorAll('#declarationThirdPartyList .g-third-party-card')];
+  const cards=allCards.filter(card=>[
+    '.gtp-name','.gtp-nipt','.gtp-address','.gtp-admin','.gtp-phone','.gtp-email','.gtp-object'
+  ].some(sel=>(card.querySelector(sel)?.value||'').trim()));
+  if(!cards.length){
+    return row('G - Subjekte të treta','Nuk është shtuar subjekt i tretë.');
+  }
+  return cards.map((card,i)=>{
+    const name=(card.querySelector('.gtp-name')?.value||'').trim();
+    return '<h4>G - '+escapeHtml(name || ('Subjekti i tretë '+(i+1)))+'</h4><ul class="review-list">'
+      +row('Emri i subjektit',name || '—')
+      +row('NUIS/NIPT',card.querySelector('.gtp-nipt')?.value||'—')
+      +row('Adresa',card.querySelector('.gtp-address')?.value||'—')
+      +row('Administratori',card.querySelector('.gtp-admin')?.value||'—')
+      +row('Telefon',card.querySelector('.gtp-phone')?.value||'—')
+      +row('e-mail',card.querySelector('.gtp-email')?.value||'—')
+      +row('Objekti i marrëveshjes/Përshkrimi i shërbimit ose aktivitetit',card.querySelector('.gtp-object')?.value||'—')
+      +'</ul>';
+  }).join('');
+}
+
+function supportDocsReview(){
+  const items=[...document.querySelectorAll('.support-doc-item')].map((item,i)=>({desc:item.querySelector('.support-desc')?.value.trim()||'',file:item.querySelector('.support-file')?.files?.[0]?.name||''})).filter(x=>x.desc||x.file);
+  if(!items.length)return '';
+  return '<h3>4.3 Dokumente të tjera mbështetëse '+edit(3)+'</h3><table class="review-docs"><thead><tr><th>Përshkrimi</th><th>Dokumenti i ngarkuar</th></tr></thead><tbody>'+items.map(x=>'<tr><td>'+escapeHtml(x.desc||'—')+'</td><td>'+escapeHtml(x.file||'—')+'</td></tr>').join('')+'</tbody></table>';
+}
+
+function docTable(title, selector, step){const files=[...document.querySelectorAll(selector)];return '<h3>'+escapeHtml(title)+' '+edit(step)+'</h3><table class="review-docs"><thead><tr><th>Dokumenti</th><th>Dokumenti i ngarkuar</th></tr></thead><tbody>'+files.map(f=>'<tr><td>'+escapeHtml(f.dataset.label||'Dokument')+'</td><td>'+escapeHtml(f.files.length?f.files[0].name:'—')+'</td></tr>').join('')+'</tbody></table>'}
+function populateReview(){
+  const licence=[...document.querySelectorAll('input[name="licence"]:checked')].map(x=>x.parentElement.textContent.trim()).join('; ')||'—';
+  const decls=[...document.querySelectorAll('.self-check')].map((l,i)=>({label:l.textContent.replace('*','').trim(),done:l.querySelector('input').checked?'Konfirmuar':'—'}));
+  let html='';
+  html+='<h3>1. Të dhënat e aplikantit dhe përfaqësimi në aplikim '+edit(0)+'</h3><ul class="review-list">'+row('Emri i subjektit',value('subjectName'))+row('NUIS/NIPT',value('nipt'))+row('Telefon',value('phone'))+row('e-mail i subjektit',value('subjectEmail'))+row('Adresa',value('address'))+row('Përfaqësimi në procedurën e aplikimit',selected('applicationFiller'))+row('Emër',value('repFirstName'))+row('Mbiemër',value('repLastName'))+row('Atësi',value('repFatherName'))+row('Datëlindje',value('repBirthDate'))+row('Vendlindje',value('repBirthPlace'))+row('Vendbanim',value('repResidence'))+row('Nr. ID',value('repId'))+row('Adresë elektronike',value('repEmail'))+row('Numër telefoni',value('repPhone'))+(selected('applicationFiller')==='Personi i autorizuar nga subjekti aplikues'?row('Akti i përfaqësimit',value('repAuthority')):'')+'</ul>';
+  html+='<h3>2. Lloji i licencës dhe të dhënat e veprimtarisë '+edit(1)+'</h3><ul class="review-list">'+row('Veprimtaritë e zgjedhura',licence)+row('Përshkrimi i aktivitetit',value('activityDescription'))+row('Numri i njësive',selected('unitNumber'))+row('Ambienti i kultivimit',selected('cultivationEnv'))+row('Sipërfaqja, koordinatat dhe vendndodhja',value('unitsDescription'))+'</ul>';
+  html+='<h3>3. Aktivitete që do të kryhen nga subjekte të treta '+edit(2)+'</h3><ul class="review-list">'+row('Opsioni i zgjedhur',selected('thirdPartyOption'))+'</ul>'+thirdPartyReview();
+  html+=docTable('4.1 Dokumentacioni i përgjithshëm','#mainDocsBody input[type="file"]',3);
+  html+=docTable('4.2 Dokumentacioni për verifikimin e pastërtisë së figurës','#peopleAccordions input[type="file"]',3);
+  html+=supportDocsReview();
+  html+='<h3>5. Formulari i vetëdeklarimeve '+edit(4)+'</h3><ul class="review-list">'+decls.map(d=>row(d.label,d.done)).join('')+declarationThirdPartyReview()+row('H - Emri i shoqërisë SHPSF',value('shpsfName'))+row('H - NUIS/NIPT',value('shpsfNipt'))+row('H - Adresa',value('shpsfAddress'))+row('H - Administratori',value('shpsfAdmin'))+row('H - Telefon',value('shpsfPhone'))+row('H - e-mail',value('shpsfEmail'))+row('H - Objekti i marrëveshjes',value('securityObject'))+row('H - Kohëzgjatja',value('securityDuration'))+row('H - Marrëveshja e sigurisë fizike',value('securityAgreement'))+'</ul>';
+  document.getElementById('reviewContent').innerHTML=html
+}
+
+function printApplication(){
+  populateReview();
+  // Siguron që përdoruesi të printojë vetëm seksionin e rishikimit me të dhënat e fundit.
+  document.querySelectorAll('.step-panel').forEach(panel=>panel.classList.remove('active'));
+  const review=document.getElementById('step-review');
+  if(review) review.classList.add('active');
+  document.querySelectorAll('.step').forEach((step,index)=>step.classList.toggle('active', index===5));
+  window.print();
+}
+document.getElementById('printBtn')?.addEventListener('click', printApplication);
+document.getElementById('addSupportDocBtn')?.addEventListener('click',()=>addSupportDoc());
+document.querySelectorAll('input[name="applicationFiller"]').forEach(cb=>cb.addEventListener('change',()=>{if(cb.checked){document.querySelectorAll('input[name="applicationFiller"]').forEach(other=>{if(other!==cb)other.checked=false})}updateState()}));
+document.addEventListener('input',e=>{if(e.target.classList.contains('tp-name'))refreshThirdPartyLabels();if(e.target.classList.contains('gtp-name'))refreshDeclarationThirdPartyLabels();});
+document.addEventListener('input',updateState);document.addEventListener('change',updateState);gotoStep(0);updateState();
+</script>
+</body>
+</html>

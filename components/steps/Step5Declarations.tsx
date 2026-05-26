@@ -84,7 +84,7 @@ function DeclThirdPartyCard({
 }
 
 function ShpsfFields() {
-  const { state, dispatch } = useForm();
+  const { state, dispatch, registerFile } = useForm();
 
   function set(field: string) {
     return (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -150,12 +150,10 @@ function ShpsfFields() {
           accept=".pdf,.jpg,.jpeg,.png"
           onChange={(e) => {
             const f = e.target.files?.[0];
-            if (f)
-              dispatch({
-                type: 'SET_FIELD',
-                field: 'securityAgreementFileName',
-                value: f.name,
-              });
+            if (f) {
+              dispatch({ type: 'SET_FIELD', field: 'securityAgreementFileName', value: f.name });
+              registerFile('securityAgreement', f);
+            }
           }}
         />
         {state.securityAgreementFileName && (

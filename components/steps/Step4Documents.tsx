@@ -9,7 +9,7 @@ function DocRow({
   onUpload,
 }: {
   doc: { id: number; name: string; help: string; fileName: string };
-  onUpload: (id: number, fileName: string) => void;
+  onUpload: (id: number, fileName: string, file: File) => void;
 }) {
   return (
     <tr>
@@ -32,7 +32,7 @@ function DocRow({
           accept=".pdf,.jpg,.jpeg,.png"
           onChange={(e) => {
             const f = e.target.files?.[0];
-            if (f) onUpload(doc.id, f.name);
+            if (f) onUpload(doc.id, f.name, f);
           }}
         />
         {doc.fileName && (
@@ -46,7 +46,7 @@ function DocRow({
 }
 
 function PersonAccordion({ person }: { person: Person }) {
-  const { dispatch } = useForm();
+  const { dispatch, registerFile } = useForm();
 
   return (
     <div className="accordion">
@@ -86,14 +86,10 @@ function PersonAccordion({ person }: { person: Person }) {
                 <DocRow
                   key={doc.id}
                   doc={doc}
-                  onUpload={(docId, fileName) =>
-                    dispatch({
-                      type: 'UPLOAD_PERSON_DOC',
-                      personId: person.id,
-                      docId,
-                      fileName,
-                    })
-                  }
+                  onUpload={(docId, fileName, file) => {
+                    dispatch({ type: 'UPLOAD_PERSON_DOC', personId: person.id, docId, fileName });
+                    registerFile(`personDoc_${person.id}_${docId}`, file);
+                  }}
                 />
               ))}
             </tbody>
@@ -105,7 +101,7 @@ function PersonAccordion({ person }: { person: Person }) {
 }
 
 export default function Step4Documents() {
-  const { state, dispatch } = useForm();
+  const { state, dispatch, registerFile } = useForm();
   const [mainOpen, setMainOpen] = useState(false);
   const [figureOpen, setFigureOpen] = useState(false);
   const [personName, setPersonName] = useState('');
@@ -160,9 +156,10 @@ export default function Step4Documents() {
                   <DocRow
                     key={doc.id}
                     doc={doc}
-                    onUpload={(docId, fileName) =>
-                      dispatch({ type: 'UPLOAD_MAIN_DOC', docId, fileName })
-                    }
+                    onUpload={(docId, fileName, file) => {
+                      dispatch({ type: 'UPLOAD_MAIN_DOC', docId, fileName });
+                      registerFile(`mainDoc_${docId}`, file);
+                    }}
                   />
                 ))}
               </tbody>
@@ -266,13 +263,10 @@ export default function Step4Documents() {
                     accept=".pdf,.jpg,.jpeg,.png"
                     onChange={(e) => {
                       const f = e.target.files?.[0];
-                      if (f)
-                        dispatch({
-                          type: 'UPDATE_SUPPORT_DOC',
-                          id: sd.id,
-                          field: 'fileName',
-                          value: f.name,
-                        });
+                      if (f) {
+                        dispatch({ type: 'UPDATE_SUPPORT_DOC', id: sd.id, field: 'fileName', value: f.name });
+                        registerFile(`supportDoc_${sd.id}`, f);
+                      }
                     }}
                   />
                   {sd.fileName && (

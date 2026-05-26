@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from '@/contexts/FormContext';
 import { DECLARATIONS } from '@/lib/mockData';
 
@@ -38,7 +39,10 @@ function ReviewSection({ title, step, children }: { title: string; step: number;
 }
 
 export default function Step6Review() {
-  const { state, dispatch, status } = useForm();
+  const { state, dispatch, status, getFileMap } = useForm();
+  const [submitting, setSubmitting] = useState(false);
+  const [submitProgress, setSubmitProgress] = useState('');
+  const [submitError, setSubmitError] = useState('');
 
   if (state.submitted) {
     return (
@@ -50,15 +54,93 @@ export default function Step6Review() {
             Aplikimi juaj u dorëzua dhe do të shqyrtohet nga Agjencia Kombëtare e Kontrollit
             të Cannabis-it.
           </p>
+          {state.applicationId && (
+            <p style={{ marginTop: 12, fontSize: '11pt' }}>
+              ID i aplikimit tuaj:{' '}
+              <strong style={{ fontFamily: 'monospace', fontSize: '13pt' }}>
+                {state.applicationId}
+              </strong>
+            </p>
+          )}
           <p style={{ marginTop: 8 }}>
             Dorëzimi i aplikimit <strong>nuk nënkupton miratim</strong> të licencës.
           </p>
-          <p style={{ marginTop: 16, color: '#403b49' }}>
+          <p style={{ marginTop: 12, color: '#403b49' }}>
+            Një email konfirmimi u dërgua në{' '}
+            <strong>{state.subjectEmail}</strong>.
+          </p>
+          <p style={{ marginTop: 8, color: '#403b49' }}>
             Për çdo pyetje kontaktoni: <strong>info@nacc.gov.al</strong>
           </p>
         </div>
       </section>
     );
+  }
+
+  async function handleSubmit() {
+    if (!status.allCore) {
+      alert('Aplikimi nuk është i plotësuar. Ju lutemi plotësoni seksionet e paplotësuara.');
+      return;
+    }
+
+    setSubmitting(true);
+    setSubmitError('');
+
+    try {
+      const fileMap = getFileMap();
+      const fileEntries = Array.from(fileMap.entries());
+
+      // Step 1: request signed upload URLs + application ID from server
+      setSubmitProgress('Duke përgatitur ngarkimin e dokumenteve…');
+      const urlsRes = await fetch('/api/upload-urls', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          files: fileEntries.map(([key, file]) => ({
+            key,
+            name: file.name,
+            type: file.type || 'application/octet-stream',
+          })),
+        }),
+      });
+      if (!urlsRes.ok) throw new Error('Nuk u morën URL-et e ngarkimit.');
+      const { applicationId, urls } = await urlsRes.json() as {
+        applicationId: string;
+        urls: { key: string; signedUrl: string; path: string }[];
+      };
+
+      // Step 2: upload each file directly to Supabase Storage
+      const filePaths: Record<string, string> = {};
+      for (let i = 0; i < urls.length; i++) {
+        const { key, signedUrl, path } = urls[i];
+        setSubmitProgress(`Duke ngarkuar dokumentet… (${i + 1}/${urls.length})`);
+        const file = fileMap.get(key)!;
+        const uploadRes = await fetch(signedUrl, {
+          method: 'PUT',
+          headers: { 'Content-Type': file.type || 'application/octet-stream' },
+          body: file,
+        });
+        if (!uploadRes.ok) throw new Error(`Ngarkimi i dokumentit dështoi (${key}).`);
+        filePaths[key] = path;
+      }
+
+      // Step 3: save to database + send emails
+      setSubmitProgress('Duke ruajtur aplikimin…');
+      const submitRes = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ applicationId, formData: state, filePaths }),
+      });
+      if (!submitRes.ok) throw new Error('Ruajtja e aplikimit dështoi.');
+
+      dispatch({ type: 'SUBMIT', applicationId });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Gabim i panjohur.';
+      setSubmitError(`Ndodhi një gabim: ${msg} Ju lutemi provoni përsëri.`);
+    } finally {
+      setSubmitting(false);
+      setSubmitProgress('');
+    }
   }
 
   const fillerVal = state.applicationFiller || '—';
@@ -189,12 +271,7 @@ export default function Step6Review() {
                   {p.docs.map((d) => (
                     <tr key={d.id}>
                       <td>{d.name}</td>
-                      <td
-                        style={{
-                          color: d.fileName ? 'var(--ok)' : 'var(--danger)',
-                          fontWeight: 800,
-                        }}
-                      >
+                      <td style={{ color: d.fileName ? 'var(--ok)' : 'var(--danger)', fontWeight: 800 }}>
                         {d.fileName || 'Mungon'}
                       </td>
                     </tr>
@@ -274,10 +351,23 @@ export default function Step6Review() {
         adresën info@nacc.gov.al.
       </div>
 
+      {submitError && (
+        <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 4, padding: '10px 14px', marginBottom: 12, color: '#b91c1c', fontSize: '10pt' }}>
+          {submitError}
+        </div>
+      )}
+
+      {submitting && submitProgress && (
+        <div style={{ background: '#f5f2ec', border: '1px solid #d8d0be', borderRadius: 4, padding: '10px 14px', marginBottom: 12, color: '#5c4b8c', fontSize: '10pt' }}>
+          ⏳ {submitProgress}
+        </div>
+      )}
+
       <div className="action-row">
         <button
           type="button"
           className="nav-btn"
+          disabled={submitting}
           onClick={() => dispatch({ type: 'SET_STEP', step: 4 })}
         >
           Kthehu
@@ -285,18 +375,10 @@ export default function Step6Review() {
         <button
           type="button"
           className="nav-btn primary"
-          disabled={!status.allCore}
-          onClick={() => {
-            if (!status.allCore) {
-              alert(
-                'Aplikimi nuk është i plotësuar. Ju lutemi plotësoni seksionet e paplotësuara.'
-              );
-              return;
-            }
-            dispatch({ type: 'SUBMIT' });
-          }}
+          disabled={!status.allCore || submitting}
+          onClick={handleSubmit}
         >
-          Dërgo aplikimin
+          {submitting ? 'Duke u dërguar…' : 'Dërgo aplikimin'}
         </button>
       </div>
     </section>

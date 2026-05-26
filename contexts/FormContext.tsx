@@ -1,104 +1,18 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, useMemo } from 'react';
+import React, { createContext, useContext, useReducer, useMemo, useRef, useCallback } from 'react';
 import { MAIN_DOCS, FIGURE_DOCS } from '@/lib/mockData';
+import type {
+  DocEntry,
+  Person,
+  ThirdParty,
+  DeclarationThirdParty,
+  SupportDoc,
+  FormState,
+} from '@/lib/types';
 
-export interface DocEntry {
-  id: number;
-  name: string;
-  help: string;
-  fileName: string;
-}
-
-export interface Person {
-  id: number;
-  name: string;
-  role: string;
-  open: boolean;
-  docs: DocEntry[];
-}
-
-export interface ThirdParty {
-  id: number;
-  name: string;
-  nipt: string;
-  address: string;
-  admin: string;
-  phone: string;
-  email: string;
-  serviceDesc: string;
-  fileName: string;
-  open: boolean;
-}
-
-export interface DeclarationThirdParty {
-  id: number;
-  name: string;
-  nipt: string;
-  address: string;
-  admin: string;
-  phone: string;
-  email: string;
-  object: string;
-  open: boolean;
-}
-
-export interface SupportDoc {
-  id: number;
-  description: string;
-  fileName: string;
-}
-
-export interface FormState {
-  subjectName: string;
-  nipt: string;
-  phone: string;
-  subjectEmail: string;
-  address: string;
-  applicationFiller: string;
-  repFirstName: string;
-  repLastName: string;
-  repFatherName: string;
-  repBirthDate: string;
-  repBirthPlace: string;
-  repResidence: string;
-  repId: string;
-  repEmail: string;
-  repPhone: string;
-  repAuthorityFileName: string;
-
-  licenceTypes: string[];
-  activityDescription: string;
-  unitNumber: string;
-  cultivationEnv: string[];
-  unitsDescription: string;
-
-  thirdPartyOption: string;
-  thirdParties: ThirdParty[];
-  nextThirdPartyId: number;
-
-  mainDocs: DocEntry[];
-  people: Person[];
-  nextPersonId: number;
-  supportDocs: SupportDoc[];
-  nextSupportDocId: number;
-
-  declarations: boolean[];
-  shpsfName: string;
-  shpsfNipt: string;
-  shpsfAddress: string;
-  shpsfAdmin: string;
-  shpsfPhone: string;
-  shpsfEmail: string;
-  securityObject: string;
-  securityDuration: string;
-  securityAgreementFileName: string;
-  declarationThirdParties: DeclarationThirdParty[];
-  nextDeclThirdPartyId: number;
-
-  currentStep: number;
-  submitted: boolean;
-}
+// Re-export types that step components already import from here
+export type { DocEntry, Person, ThirdParty, DeclarationThirdParty, SupportDoc, FormState };
 
 type Action =
   | { type: 'SET_FIELD'; field: keyof FormState; value: unknown }
@@ -124,7 +38,7 @@ type Action =
   | { type: 'REMOVE_DECL_THIRD_PARTY'; id: number }
   | { type: 'UPDATE_DECL_THIRD_PARTY'; id: number; field: string; value: string }
   | { type: 'TOGGLE_DECL_THIRD_PARTY'; id: number }
-  | { type: 'SUBMIT' };
+  | { type: 'SUBMIT'; applicationId: string };
 
 function makePerson(id: number, name: string, role: string): Person {
   return {
@@ -187,6 +101,7 @@ const initialState: FormState = {
 
   currentStep: 0,
   submitted: false,
+  applicationId: '',
 };
 
 function reducer(state: FormState, action: Action): FormState {
@@ -359,16 +274,8 @@ function reducer(state: FormState, action: Action): FormState {
         ),
       };
 
-    case 'TOGGLE_DECL_THIRD_PARTY':
-      return {
-        ...state,
-        declarationThirdParties: state.declarationThirdParties.map((p) =>
-          p.id === action.id ? { ...p, open: !p.open } : p
-        ),
-      };
-
     case 'SUBMIT':
-      return { ...state, submitted: true };
+      return { ...state, submitted: true, applicationId: action.applicationId };
 
     default:
       return state;
@@ -455,6 +362,8 @@ interface FormContextValue {
   state: FormState;
   dispatch: React.Dispatch<Action>;
   status: SectionStatus;
+  registerFile: (key: string, file: File) => void;
+  getFileMap: () => Map<string, File>;
 }
 
 const FormContext = createContext<FormContextValue | null>(null);
@@ -462,8 +371,17 @@ const FormContext = createContext<FormContextValue | null>(null);
 export function FormProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const status = useMemo(() => computeStatus(state), [state]);
+
+  // File objects live outside the reducer — they are not serialisable and
+  // don't need to trigger re-renders; a ref is the right primitive here.
+  const filesRef = useRef<Map<string, File>>(new Map());
+  const registerFile = useCallback((key: string, file: File) => {
+    filesRef.current.set(key, file);
+  }, []);
+  const getFileMap = useCallback(() => filesRef.current, []);
+
   return (
-    <FormContext.Provider value={{ state, dispatch, status }}>
+    <FormContext.Provider value={{ state, dispatch, status, registerFile, getFileMap }}>
       {children}
     </FormContext.Provider>
   );

@@ -25,7 +25,7 @@ function Field({
 }
 
 export default function Step1Applicant() {
-  const { state, dispatch } = useForm();
+  const { state, dispatch, registerFile } = useForm();
   const isAuthorized = state.applicationFiller === 'Personi i autorizuar nga subjekti aplikues';
 
   function set(field: string) {
@@ -124,8 +124,10 @@ export default function Step1Applicant() {
               accept=".pdf,.jpg,.jpeg,.png"
               onChange={(e) => {
                 const f = e.target.files?.[0];
-                if (f)
+                if (f) {
                   dispatch({ type: 'SET_FIELD', field: 'repAuthorityFileName', value: f.name });
+                  registerFile('repAuthority', f);
+                }
               }}
             />
             {state.repAuthorityFileName && (

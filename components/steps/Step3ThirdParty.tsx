@@ -9,7 +9,7 @@ function ThirdPartyCard({
   tp: ThirdParty;
   index: number;
 }) {
-  const { dispatch } = useForm();
+  const { dispatch, registerFile } = useForm();
 
   function update(field: string) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -90,13 +90,15 @@ function ThirdPartyCard({
                 accept=".pdf,.jpg,.jpeg,.png"
                 onChange={(e) => {
                   const f = e.target.files?.[0];
-                  if (f)
+                  if (f) {
                     dispatch({
                       type: 'UPDATE_THIRD_PARTY',
                       id: tp.id,
                       field: 'fileName',
                       value: f.name,
                     });
+                    registerFile(`thirdParty_${tp.id}`, f);
+                  }
                 }}
               />
               {tp.fileName && (
