@@ -103,7 +103,12 @@ export default function Step6Review() {
           })),
         }),
       });
-      if (!urlsRes.ok) throw new Error('Nuk u morën URL-et e ngarkimit.');
+      if (!urlsRes.ok) {
+        const errBody = await urlsRes.json().catch(() => null) as { error?: string } | null;
+        throw new Error(
+          `Nuk u morën URL-et e ngarkimit.${errBody?.error ? ` (${errBody.error})` : ''}`
+        );
+      }
       const { applicationId, urls } = await urlsRes.json() as {
         applicationId: string;
         urls: { key: string; signedUrl: string; path: string }[];

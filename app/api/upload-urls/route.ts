@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ applicationId, urls });
   } catch (err) {
     console.error('[upload-urls]', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const message = err instanceof Error ? err.message : 'Internal server error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
