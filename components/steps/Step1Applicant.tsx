@@ -1,6 +1,7 @@
 'use client';
 
 import { useForm } from '@/contexts/FormContext';
+import { validateFile } from '@/lib/files';
 
 function Field({
   label,
@@ -124,10 +125,15 @@ export default function Step1Applicant() {
               accept=".pdf,.jpg,.jpeg,.png"
               onChange={(e) => {
                 const f = e.target.files?.[0];
-                if (f) {
-                  dispatch({ type: 'SET_FIELD', field: 'repAuthorityFileName', value: f.name });
-                  registerFile('repAuthority', f);
+                if (!f) return;
+                const err = validateFile(f);
+                if (err) {
+                  alert(err);
+                  e.target.value = '';
+                  return;
                 }
+                dispatch({ type: 'SET_FIELD', field: 'repAuthorityFileName', value: f.name });
+                registerFile('repAuthority', f);
               }}
             />
             {state.repAuthorityFileName && (

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase';
+import { buildStoragePath } from '@/lib/files';
 import { randomBytes } from 'crypto';
 
 const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -22,8 +23,7 @@ export async function POST(req: NextRequest) {
 
     const urls = await Promise.all(
       body.files.map(async ({ key, name }) => {
-        const ext = name.split('.').pop()?.toLowerCase() ?? 'bin';
-        const path = `${applicationId}/${key}.${ext}`;
+        const path = buildStoragePath(applicationId, key, name);
         const { data, error } = await supabase.storage
           .from('documents')
           .createSignedUploadUrl(path);

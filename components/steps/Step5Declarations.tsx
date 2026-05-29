@@ -2,6 +2,7 @@
 
 import { useForm, DeclarationThirdParty } from '@/contexts/FormContext';
 import { DECLARATIONS } from '@/lib/mockData';
+import { validateFile } from '@/lib/files';
 
 function DeclThirdPartyCard({
   dtp,
@@ -150,10 +151,15 @@ function ShpsfFields() {
           accept=".pdf,.jpg,.jpeg,.png"
           onChange={(e) => {
             const f = e.target.files?.[0];
-            if (f) {
-              dispatch({ type: 'SET_FIELD', field: 'securityAgreementFileName', value: f.name });
-              registerFile('securityAgreement', f);
+            if (!f) return;
+            const err = validateFile(f);
+            if (err) {
+              alert(err);
+              e.target.value = '';
+              return;
             }
+            dispatch({ type: 'SET_FIELD', field: 'securityAgreementFileName', value: f.name });
+            registerFile('securityAgreement', f);
           }}
         />
         {state.securityAgreementFileName && (

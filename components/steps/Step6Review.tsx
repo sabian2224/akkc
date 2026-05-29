@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useForm } from '@/contexts/FormContext';
 import { DECLARATIONS } from '@/lib/mockData';
+import { contentTypeFor } from '@/lib/files';
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
@@ -115,26 +116,29 @@ export default function Step6Review() {
       };
 
       // Step 2: upload each file directly to Supabase Storage
-      const filePaths: Record<string, string> = {};
       for (let i = 0; i < urls.length; i++) {
-        const { key, signedUrl, path } = urls[i];
+        const { key, signedUrl } = urls[i];
         setSubmitProgress(`Duke ngarkuar dokumentet… (${i + 1}/${urls.length})`);
         const file = fileMap.get(key)!;
         const uploadRes = await fetch(signedUrl, {
           method: 'PUT',
-          headers: { 'Content-Type': file.type || 'application/octet-stream' },
+          headers: { 'Content-Type': contentTypeFor(file) },
           body: file,
         });
         if (!uploadRes.ok) throw new Error(`Ngarkimi i dokumentit dështoi (${key}).`);
-        filePaths[key] = path;
       }
 
-      // Step 3: save to database + send emails
+      // Step 3: save to database + send emails. The server derives storage
+      // paths from these keys/names, so we don't send paths from the client.
       setSubmitProgress('Duke ruajtur aplikimin…');
       const submitRes = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ applicationId, formData: state, filePaths }),
+        body: JSON.stringify({
+          applicationId,
+          formData: state,
+          files: fileEntries.map(([key, file]) => ({ key, name: file.name })),
+        }),
       });
       if (!submitRes.ok) throw new Error('Ruajtja e aplikimit dështoi.');
 

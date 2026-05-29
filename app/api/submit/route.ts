@@ -1,23 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase';
 import { sendAdminEmail, sendApplicantEmail } from '@/lib/email';
+import { buildStoragePath } from '@/lib/files';
 import { randomBytes } from 'crypto';
 import { MAIN_DOCS, FIGURE_DOCS } from '@/lib/mockData';
 import type { FormState, FileInfo } from '@/lib/types';
 
 export async function POST(req: NextRequest) {
   try {
-    const { applicationId, formData, filePaths } = await req.json() as {
+    const { applicationId, formData, files: uploadedFiles } = await req.json() as {
       applicationId: string;
       formData: FormState;
-      filePaths: Record<string, string>;
+      files: { key: string; name: string }[];
     };
 
     const adminToken = randomBytes(32).toString('hex');
 
-    // Enrich file metadata with human-readable labels for the admin view
+    // Enrich file metadata with human-readable labels for the admin view.
+    // Storage paths are derived server-side from the application id + key so we
+    // never trust an arbitrary path supplied by the client.
     const files: Record<string, FileInfo> = {};
-    for (const [key, path] of Object.entries(filePaths)) {
+    for (const { key, name } of uploadedFiles) {
+      const path = buildStoragePath(applicationId, key, name);
       let label = key;
       let person: string | undefined;
 
@@ -56,7 +60,15 @@ export async function POST(req: NextRequest) {
       data: formData,
       files,
     });
-    if (dbError) throw dbError;
+    if (dbError) {
+      // The files were uploaded to Storage before this row could be created.
+      // Remove them so a failed submission doesn't leave orphans behind.
+      const paths = Object.values(files).map((f) => f.path);
+      if (paths.length) {
+        await supabase.storage.from('documents').remove(paths);
+      }
+      throw dbError;
+    }
 
     const now = new Date().toLocaleString('sq-AL', { timeZone: 'Europe/Tirane' });
 

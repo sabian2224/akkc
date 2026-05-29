@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useForm, Person } from '@/contexts/FormContext';
 import { PERSON_ROLES } from '@/lib/mockData';
+import { validateFile } from '@/lib/files';
 
 function DocRow({
   doc,
@@ -32,7 +33,14 @@ function DocRow({
           accept=".pdf,.jpg,.jpeg,.png"
           onChange={(e) => {
             const f = e.target.files?.[0];
-            if (f) onUpload(doc.id, f.name, f);
+            if (!f) return;
+            const err = validateFile(f);
+            if (err) {
+              alert(err);
+              e.target.value = '';
+              return;
+            }
+            onUpload(doc.id, f.name, f);
           }}
         />
         {doc.fileName && (
@@ -263,10 +271,15 @@ export default function Step4Documents() {
                     accept=".pdf,.jpg,.jpeg,.png"
                     onChange={(e) => {
                       const f = e.target.files?.[0];
-                      if (f) {
-                        dispatch({ type: 'UPDATE_SUPPORT_DOC', id: sd.id, field: 'fileName', value: f.name });
-                        registerFile(`supportDoc_${sd.id}`, f);
+                      if (!f) return;
+                      const err = validateFile(f);
+                      if (err) {
+                        alert(err);
+                        e.target.value = '';
+                        return;
                       }
+                      dispatch({ type: 'UPDATE_SUPPORT_DOC', id: sd.id, field: 'fileName', value: f.name });
+                      registerFile(`supportDoc_${sd.id}`, f);
                     }}
                   />
                   {sd.fileName && (
