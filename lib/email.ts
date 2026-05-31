@@ -56,6 +56,49 @@ export async function sendAdminEmail(opts: {
   });
 }
 
+export async function sendInquiryEmail(opts: {
+  inquiryId: string;
+  email: string;
+  category: string;
+  subject: string;
+  message: string;
+  applicationId?: string;
+  submittedAt: string;
+}) {
+  const esc = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  await createTransport().sendMail({
+    from: process.env.SMTP_FROM,
+    to: process.env.ADMIN_EMAIL,
+    replyTo: opts.email,
+    subject: `[AKKC] Pyetje/kërkesë - ${opts.subject}`,
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:600px">
+        <div style="background:#009b93;color:#fff;padding:16px 24px">
+          <h2 style="margin:0">Pyetje/kërkesë e re – AKKC</h2>
+        </div>
+        <div style="padding:24px">
+          <table cellpadding="6" style="border-collapse:collapse;width:100%;font-size:14px">
+            <tr><td style="color:#666;width:160px">ID:</td><td><strong>${opts.inquiryId}</strong></td></tr>
+            <tr><td style="color:#666">E-mail:</td><td>${esc(opts.email)}</td></tr>
+            <tr><td style="color:#666">Kategoria:</td><td>${esc(opts.category)}</td></tr>
+            <tr><td style="color:#666">Subjekti:</td><td>${esc(opts.subject)}</td></tr>
+            ${opts.applicationId ? `<tr><td style="color:#666">Aplikimi:</td><td>${esc(opts.applicationId)}</td></tr>` : ''}
+            <tr><td style="color:#666">Data:</td><td>${opts.submittedAt}</td></tr>
+          </table>
+          <div style="margin-top:16px;padding:14px;background:#f5f3f8;border-left:4px solid #009b93;border-radius:0 6px 6px 0">
+            <div style="color:#666;font-size:12px;margin-bottom:6px">Pyetja/kërkesa:</div>
+            <div style="white-space:pre-wrap;font-size:14px">${esc(opts.message)}</div>
+          </div>
+          <p style="color:#888;font-size:12px;margin-top:20px">
+            Për t'iu përgjigjur, përdorni butonin "Reply" – do të dërgohet te ${esc(opts.email)}.
+          </p>
+        </div>
+      </div>
+    `,
+  });
+}
+
 export async function sendApplicantEmail(opts: {
   applicationId: string;
   repFirstName: string;

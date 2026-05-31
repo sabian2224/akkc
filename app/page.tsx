@@ -5,6 +5,7 @@ import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
 import ApplicationForm from '@/components/ApplicationForm';
 import Sidebar from '@/components/Sidebar';
+import ChatWidget from '@/components/ChatWidget';
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
             <ApplicationForm />
             <Sidebar />
           </div>
+          <ChatWidget />
         </FormProvider>
       </main>
       <Footer />

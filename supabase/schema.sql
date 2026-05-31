@@ -14,6 +14,22 @@ create table if not exists applications (
 create index if not exists applications_admin_token_idx
   on applications (admin_token);
 
+-- Inquiries table — questions/requests submitted from the "Keni pyetje?" chat widget
+create table if not exists inquiries (
+  id               uuid primary key default gen_random_uuid(),
+  inquiry_id       text unique not null,
+  created_at       timestamptz not null default now(),
+  email            text not null,
+  category         text not null,
+  subject          text not null,
+  message          text not null,
+  application_id   text,            -- optional link to an in-progress application
+  handled          boolean not null default false
+);
+
+create index if not exists inquiries_created_at_idx
+  on inquiries (created_at desc);
+
 -- Storage bucket for uploaded documents
 -- Run this separately or create manually in Dashboard → Storage → New bucket
 -- Name: documents
@@ -40,6 +56,14 @@ alter table applications enable row level security;
 
 create policy "service role full access"
   on applications
+  for all
+  using (true)
+  with check (true);
+
+alter table inquiries enable row level security;
+
+create policy "service role full access inquiries"
+  on inquiries
   for all
   using (true)
   with check (true);
