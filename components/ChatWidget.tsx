@@ -99,7 +99,6 @@ export default function ChatWidget() {
           onClick={() => setOpen(true)}
           aria-label="Hap formularin e pyetjeve"
         >
-          <span className="chat-fab-icon" aria-hidden>💬</span>
           Keni pyetje?
         </button>
       )}
