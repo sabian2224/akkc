@@ -1,0 +1,26 @@
+# Build artifacts & deps (rebuilt inside the image)
+node_modules
+.next
+out
+
+# Secrets — never copy any real env file into the build context
+.env
+.env.*
+!.env.example
+
+# VCS / local
+.git
+.gitignore
+*.log
+npm-debug.log*
+
+# Editor / OS junk
+.DS_Store
+.vscode
+.idea
+
+# Docs & local-only assets not needed at runtime
+README.md
+DEPLOYMENT.md
+web mockup*.html
+tsconfig.tsbuildinfo

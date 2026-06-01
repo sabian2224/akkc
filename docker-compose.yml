@@ -1,0 +1,42 @@
+# AKKC – production stack.
+# The app is stateless: Postgres, file Storage and pg_cron all live in Supabase
+# Cloud, so this compose file runs only the Next.js server. All secrets come
+# from the .env file in this directory (see .env.example) and are never baked
+# into the image.
+
+services:
+  akkc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: akkc-app:latest
+    container_name: akkc-app
+    restart: unless-stopped
+    # Secrets & runtime config (Supabase service-role key, SMTP, etc.)
+    env_file:
+      - .env
+    # Bind to localhost only. Nginx Proxy Manager reaches the app over the
+    # shared Docker network by container name, so the port never has to be
+    # published to the public interface. Kept here for local debugging only.
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - npm_network
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  # Shared network that Nginx Proxy Manager also joins, so NPM can proxy to
+  # http://akkc-app:3000 by name. Created once on the VPS (see DEPLOYMENT.md):
+  #   docker network create npm_network
+  npm_network:
+    external: true
